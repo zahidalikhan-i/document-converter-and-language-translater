@@ -292,7 +292,7 @@
                     </div>
                 </li>
             </ul>
-            <button class="translate" id="btnTranslate"><i class="fas fa-play"></i> Translate Text</button>
+            <button type="button" class="translate" id="btnTranslate"><i class="fas fa-play"></i> Translate Text</button>
         </div>
 
         <div class="love">
@@ -307,19 +307,17 @@
         (function() {
             const token = localStorage.getItem('api_token');
             const banner = document.getElementById('guestBanner');
-            const translate = document.getElementById('btnTranslate');
             const nameEl = document.getElementById('userName');
             const userPill = document.getElementById('userPill');
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
+
+            // Translator is client-side; allow guests to translate.
             if (!token) {
                 if (banner) banner.style.display = 'block';
-                if (translate) {
-                    translate.disabled = true;
-                    translate.style.opacity = 0.6;
-                    translate.style.cursor = 'not-allowed';
-                }
                 loginBtn && (loginBtn.style.display = 'inline-flex');
+                if (userPill) userPill.style.display = 'none';
+                if (logoutBtn) logoutBtn.style.display = 'none';
             } else {
                 userPill.style.display = 'inline-flex';
                 logoutBtn.style.display = 'inline-flex';
@@ -342,11 +340,13 @@
                     .catch(() => {
                         localStorage.removeItem('api_token');
                         localStorage.removeItem('user');
-                        userPill.style.display = 'none';
-                        logoutBtn.style.display = 'none';
-                        loginBtn.style.display = 'inline-flex';
+                        if (userPill) userPill.style.display = 'none';
+                        if (logoutBtn) logoutBtn.style.display = 'none';
+                        loginBtn && (loginBtn.style.display = 'inline-flex');
+                        if (banner) banner.style.display = 'block';
                     });
             }
+
             logoutBtn && logoutBtn.addEventListener('click', function() {
                 localStorage.removeItem('api_token');
                 localStorage.removeItem('user');

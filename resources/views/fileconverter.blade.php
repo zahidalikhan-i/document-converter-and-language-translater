@@ -300,20 +300,13 @@
         (function() {
             const token = localStorage.getItem('api_token');
             const banner = document.getElementById('guestBanner');
-            const buttons = [document.getElementById('btnWordToPdf'), document.getElementById('btnPdfToWord'), document.getElementById('btnDownload')];
             const nameEl = document.getElementById('userName');
             const userPill = document.getElementById('userPill');
             const loginBtn = document.getElementById('loginBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             if (!token) {
-                banner.style.display = 'block';
-                buttons.forEach(b => {
-                    if (b) {
-                        b.disabled = true;
-                        b.style.opacity = 0.6;
-                        b.style.cursor = 'not-allowed';
-                    }
-                });
+                // Allow guests to convert files (server routes handle validation).
+                banner && (banner.style.display = 'none');
                 loginBtn && (loginBtn.style.display = 'inline-flex');
             } else {
                 userPill.style.display = 'inline-flex';
@@ -354,9 +347,6 @@
                 const prog = document.getElementById(progId);
                 if (!form) return;
                 form.addEventListener('submit', function() {
-                    if (!token) {
-                        return;
-                    }
                     prog.style.display = 'block';
                     bar.style.width = '15%';
                     let p = 15;
